@@ -1,9 +1,7 @@
-from PIL import ImageOps
 
 
 def get_map(image):
     image_ = image.convert(mode='L')
-    image_ = ImageOps.invert(image_)
     matrix = []
     for i in range(image_.height):
         row = []

@@ -50,10 +50,16 @@ def build_flat_graph(x, y, my_map):
     trace1 = go.Scatter(
             x=[i for i in range(0, len(my_map[y]))],
             y=my_map[y],
+            line=dict(
+                shape='spline'
+            )
         )
     trace2 = go.Scatter(
             x=[i for i in range(0, len(my_map))],
-            y=[i[x] for i in my_map]
+            y=[i[x] for i in my_map],
+            line=dict(
+                shape='spline'
+            )
         )
     fig = tools.make_subplots(rows=1, cols=2,
                               subplot_titles=('Вдоль оси x', 'Вдоль оси y'))

@@ -13,6 +13,9 @@ from plotly import tools
 
 from utils import get_map, get_avg_by_x, get_avg_by_y
 
+AVG_DELTA_DEFAULT = 2
+
+
 lo = go.Layout(
     autosize=False,
     width=500,
@@ -45,17 +48,17 @@ def build_map_by_image(contents, filename):
     return my_map
 
 
-def build_flat_graph(x, y, my_map):
+def build_flat_graph(x, y, my_map, delta):
     trace1 = go.Scatter(
             x=[i for i in range(0, len(my_map[y]))],
-            y=get_avg_by_y(y, 2, my_map),
+            y=get_avg_by_y(y, delta, my_map),
             line=dict(
                 shape='spline'
             )
         )
     trace2 = go.Scatter(
             x=[i for i in range(0, len(my_map))],
-            y=get_avg_by_x(x, 2, my_map),
+            y=get_avg_by_x(x, delta, my_map),
             line=dict(
                 shape='spline'
             )
@@ -98,6 +101,14 @@ app.layout = html.Div(children=[
     dcc.Graph(
         id='graph'
     ),
+    html.Label(
+        children='Количесвто соседних строк с каждой стороны для усреднения '
+                 'значений'),
+    dcc.Input(
+        id='avg-delta',
+        type='number',
+
+    ),
     html.Div(
         id='output-flat-graph'
     ),
@@ -125,13 +136,15 @@ def update_output(children):
 
 @app.callback(Output('output-flat-graph', 'children'),
               [Input('graph', 'clickData'),
+               Input('avg-delta', 'value'),
                Input('map-value', 'children')])
-def draw_flat_graph(clickData, children):
+def draw_flat_graph(clickData, value, children):
+    delta = value or AVG_DELTA_DEFAULT
     if clickData:
         fix_x = clickData['points'][0]['x']
         fix_y = clickData['points'][0]['y']
         my_map = json.loads(children)
-        return build_flat_graph(x=fix_x, y=fix_y, my_map=my_map)
+        return build_flat_graph(x=fix_x, y=fix_y, my_map=my_map, delta=delta)
 
 
 if __name__ == '__main__':

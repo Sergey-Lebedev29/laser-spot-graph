@@ -102,7 +102,7 @@ app.layout = html.Div(children=[
         id='graph'
     ),
     html.Label(
-        children='Количесвто соседних строк с каждой стороны для усреднения '
+        children='Количество соседних строк с каждой стороны для усреднения '
                  'значений'),
     dcc.Input(
         id='avg-delta',

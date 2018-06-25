@@ -11,8 +11,7 @@ from PIL import Image
 from dash.dependencies import Output, Input
 from plotly import tools
 
-from utils import get_map
-
+from utils import get_map, get_avg_by_x, get_avg_by_y
 
 lo = go.Layout(
     autosize=False,
@@ -49,14 +48,14 @@ def build_map_by_image(contents, filename):
 def build_flat_graph(x, y, my_map):
     trace1 = go.Scatter(
             x=[i for i in range(0, len(my_map[y]))],
-            y=my_map[y],
+            y=get_avg_by_y(y, 2, my_map),
             line=dict(
                 shape='spline'
             )
         )
     trace2 = go.Scatter(
             x=[i for i in range(0, len(my_map))],
-            y=[i[x] for i in my_map],
+            y=get_avg_by_x(x, 2, my_map),
             line=dict(
                 shape='spline'
             )
